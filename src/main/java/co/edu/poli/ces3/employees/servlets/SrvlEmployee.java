@@ -52,6 +52,18 @@ public class SrvlEmployee extends HttpServlet {
         return null;
     }
 
+    private void updateEmployee(String employeeId, JsonObject body) {
+        for (Employee x: this.EMPLOYEES) {
+            if(x.getId().equals(employeeId)){
+                x.setAge(body.get("age").getAsInt());
+                x.setName(body.get("name").getAsString());
+                x.setLastName(body.get("lastName").getAsString());
+                break;
+            }
+        }
+
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -78,7 +90,25 @@ public class SrvlEmployee extends HttpServlet {
          */
     }
 
-    //TODO: Para eliminar se recorre la colección y se consulta como se borra un item de arraylist
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        ServletOutputStream out = response.getOutputStream();
+        Gson gson = gsonBuilder.create();
+        JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
+
+        out.flush();
+        if(request.getParameter("employeeId") == null){
+            out.print(gson.toJson(this.EMPLOYEES));
+        }else{
+            updateEmployee(request.getParameter("employeeId"), body);
+            Employee empl = this.searchEmployee(request.getParameter("employeeId"));
+            out.print(gson.toJson(empl));
+        }
+
+    }
+
+        //TODO: Para eliminar se recorre la colección y se consulta como se borra un item de arraylist
     private String getParamsFromPost(HttpServletRequest request) throws IOException {
         BufferedReader reader = request.getReader();
         StringBuilder sb = new StringBuilder();
