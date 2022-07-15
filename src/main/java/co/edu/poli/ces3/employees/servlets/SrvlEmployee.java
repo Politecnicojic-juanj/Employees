@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 @WebServlet(name = "SrvlEmployee", value = "/SrvlEmployee")
@@ -61,7 +62,15 @@ public class SrvlEmployee extends HttpServlet {
                 break;
             }
         }
+    }
 
+    private void deleteEmployee(String employeeId) {
+        for (int i = 0; i < this.EMPLOYEES.size(); i++) {
+            if(this.EMPLOYEES.get(i).getId().equals(employeeId)){
+                this.EMPLOYEES.remove(i);
+                break;
+            }
+        }
     }
 
     @Override
@@ -106,6 +115,21 @@ public class SrvlEmployee extends HttpServlet {
             out.print(gson.toJson(empl));
         }
 
+    }
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        ServletOutputStream out = response.getOutputStream();
+        Gson gson = gsonBuilder.create();
+        JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
+
+        out.flush();
+        if(request.getParameter("employeeId") == null){
+            out.print(gson.toJson(this.EMPLOYEES));
+        }else{
+            deleteEmployee(request.getParameter("employeeId"));
+            out.print(gson.toJson(this.EMPLOYEES));
+        }
     }
 
         //TODO: Para eliminar se recorre la colección y se consulta como se borra un item de arraylist
