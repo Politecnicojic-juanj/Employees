@@ -1,5 +1,6 @@
 package co.edu.poli.ces3.employees.servlets;
 
+import co.edu.poli.ces3.employees.entities.Employee;
 import co.edu.poli.ces3.employees.entities.Game;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 @WebServlet(name = "SrvlGames", value = "/SrvlGames")
 public class SrvlGames extends HttpServlet {
@@ -47,8 +49,35 @@ public class SrvlGames extends HttpServlet {
     }
 
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        ServletOutputStream out = response.getOutputStream();
+        Gson gson = gsonBuilder.create();
+        response.setContentType("application/json");
+
+        JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
+
+        int min = 103, max =1000;
+        Random rd = new Random();
+
+        Game game = new Game(
+                String.valueOf(rd.nextInt(max - min) + min),
+                body.get("image").getAsString(),
+                body.get("name").getAsString(),
+                body.get("description").getAsString(),
+                body.get("author").getAsString(),
+                body.get("calification").getAsString()
+        );
+
+        this.GAMES.add(game);
+        out.print(gson.toJson(game));
+        out.flush();
+    }
+
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
+        response.setContentType("application/json");
         ServletOutputStream out = response.getOutputStream();
         Gson gson = gsonBuilder.create();
 

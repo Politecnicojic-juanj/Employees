@@ -67,6 +67,7 @@ public class SrvlEmployee extends HttpServlet {
         GsonBuilder gsonBuilder = new GsonBuilder();
         ServletOutputStream out = response.getOutputStream();
         Gson gson = gsonBuilder.create();
+        response.setContentType("application/json");
         JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
 
         out.flush();
@@ -84,6 +85,7 @@ public class SrvlEmployee extends HttpServlet {
         GsonBuilder gsonBuilder = new GsonBuilder();
         ServletOutputStream out = response.getOutputStream();
         Gson gson = gsonBuilder.create();
+        response.setContentType("application/json");
 
         out.flush();
         if(request.getParameter("employeeId") == null){
