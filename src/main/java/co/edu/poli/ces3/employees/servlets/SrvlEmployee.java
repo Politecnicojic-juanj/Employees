@@ -43,36 +43,6 @@ public class SrvlEmployee extends HttpServlet {
 
     }
 
-    //Metodo privado solo puede llamarse en esa clase
-    private Employee searchEmployee(String employeeId) {
-        for (Employee x: this.EMPLOYEES) {
-            if(x.getId().equals(employeeId)){
-                return x;
-            }
-        }
-        return null;
-    }
-
-    private void updateEmployee(String employeeId, JsonObject body) {
-        for (Employee x: this.EMPLOYEES) {
-            if(x.getId().equals(employeeId)){
-                x.setAge(body.get("age").getAsInt());
-                x.setName(body.get("name").getAsString());
-                x.setLastName(body.get("lastName").getAsString());
-                break;
-            }
-        }
-    }
-
-    private void deleteEmployee(String employeeId) {
-        for (int i = 0; i < this.EMPLOYEES.size(); i++) {
-            if(this.EMPLOYEES.get(i).getId().equals(employeeId)){
-                this.EMPLOYEES.remove(i);
-                break;
-            }
-        }
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
@@ -91,12 +61,6 @@ public class SrvlEmployee extends HttpServlet {
         this.EMPLOYEES.add(employee);
         out.print(gson.toJson(employee));
         out.flush();
-        /*
-        employees.add(new Employee("Julian", "Cadavid"));
-        request.setAttribute("employees", employees);
-        request.getRequestDispatcher("views/employees/list.jsp").forward(request,response);
-
-         */
     }
 
     @Override
@@ -132,7 +96,37 @@ public class SrvlEmployee extends HttpServlet {
         }
     }
 
-        //TODO: Para eliminar se recorre la colección y se consulta como se borra un item de arraylist
+
+    //Metodo privado solo puede llamarse en esa clase
+    private Employee searchEmployee(String employeeId) {
+        for (Employee x: this.EMPLOYEES) {
+            if(x.getId().equals(employeeId)){
+                return x;
+            }
+        }
+        return null;
+    }
+
+    private void updateEmployee(String employeeId, JsonObject body) {
+        for (Employee x: this.EMPLOYEES) {
+            if(x.getId().equals(employeeId)){
+                x.setAge(body.get("age").getAsInt());
+                x.setName(body.get("name").getAsString());
+                x.setLastName(body.get("lastName").getAsString());
+                break;
+            }
+        }
+    }
+
+    private void deleteEmployee(String employeeId) {
+        for (int i = 0; i < this.EMPLOYEES.size(); i++) {
+            if(this.EMPLOYEES.get(i).getId().equals(employeeId)){
+                this.EMPLOYEES.remove(i);
+                break;
+            }
+        }
+    }
+
     private String getParamsFromPost(HttpServletRequest request) throws IOException {
         BufferedReader reader = request.getReader();
         StringBuilder sb = new StringBuilder();
