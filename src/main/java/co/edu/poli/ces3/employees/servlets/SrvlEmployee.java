@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Random;
 
 @WebServlet(name = "SrvlEmployee", value = "/SrvlEmployee")
@@ -85,7 +84,6 @@ public class SrvlEmployee extends HttpServlet {
         GsonBuilder gsonBuilder = new GsonBuilder();
         ServletOutputStream out = response.getOutputStream();
         Gson gson = gsonBuilder.create();
-        JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
 
         out.flush();
         if(request.getParameter("employeeId") == null){

@@ -1,6 +1,6 @@
 package co.edu.poli.ces3.employees.entities;
 
-public class Games {
+public class Game {
 
     protected String id;
 
@@ -62,7 +62,7 @@ public class Games {
         this.calification = calification;
     }
 
-    public Games(String id, String image, String name, String description, String author, String calification) {
+    public Game(String id, String image, String name, String description, String author, String calification) {
         this.id = id;
         this.image = image;
         this.name = name;
