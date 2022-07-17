@@ -90,6 +90,36 @@ public class SrvlGames extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        ServletOutputStream out = response.getOutputStream();
+        Gson gson = gsonBuilder.create();
+        response.setContentType("application/json");
+        JsonObject body = JsonParser.parseString(this.getParamsFromPost(request)).getAsJsonObject();
+
+        out.flush();
+        if(request.getParameter("gameId") == null){
+            out.print(gson.toJson(this.GAMES));
+        }else{
+            updateGame(request.getParameter("gameId"), body);
+            Game game = this.searchGame(request.getParameter("gameId"));
+            out.print(gson.toJson(game));
+        }
+    }
+    private void updateGame(String gameId, JsonObject body) {
+        for (Game x: this.GAMES) {
+            if(x.getId().equals(gameId)){
+                x.setName(body.get("name").getAsString());
+                x.setImage(body.get("image").getAsString());
+                x.setDescription(body.get("description").getAsString());
+                x.setAuthor(body.get("author").getAsString());
+                x.setCalification(body.get("calification").getAsString());
+                break;
+            }
+        }
+    }
+
     private Game searchGame(String gameId) {
         for (Game x: this.GAMES) {
             if(x.getId().equals(gameId)){

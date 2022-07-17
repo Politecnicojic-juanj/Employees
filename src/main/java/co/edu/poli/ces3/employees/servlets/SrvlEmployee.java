@@ -78,8 +78,8 @@ public class SrvlEmployee extends HttpServlet {
             Employee empl = this.searchEmployee(request.getParameter("employeeId"));
             out.print(gson.toJson(empl));
         }
-
     }
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
